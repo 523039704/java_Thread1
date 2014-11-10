@@ -3,7 +3,10 @@ package db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.SQLException; 
+
+import util.Testdemo; 
+
 /**
  * 多线程 数据库检索的demo
  * @author liu
@@ -45,9 +48,10 @@ class Ji implements Runnable {
 
 public class Thread_select {
 	 public static void main(String[] args) throws Exception{
-	 
+		  Testdemo  t = Testdemo .getThreadPool(5); 	 
 		Thread_select select= new Thread_select();
-		 int cishu=select.sqlsum();
+//		 int cishu=select.sqlsum();
+		 int cishu=50000;
 		 int yushu=cishu%1000;
 		 int id=         1000;
 		     cishu=cishu/1000;
@@ -55,20 +59,26 @@ public class Thread_select {
 		 {
 			 cishu=cishu+1; 
 		 }
-		
+		 
+ 
 		 for(int a=0; a<cishu;a++)
 		 {
 			 if(a==0)
 			 {
-				  new Thread(new Ji(String.valueOf(1),"id>"+id)).start();
+				   t.execute(new Ji(String.valueOf(1),"id>"+id))   ;
 			 }else if(a==50)
 			 {
-				  new Thread(new Ji(String.valueOf(2),"id<='"+(id*a)+"' and id>='"+(id*a+yushu)+"'")).start();
+				   t.execute( new Ji(String.valueOf(2),"id<='"+(id*a)+"' and id>='"+(id*a+yushu)+"'") ) ;
 			 }else
 			 {
-			      new Thread(new Ji(String.valueOf(3),"id<='"+(id*a)+"' and id>'"+id*(a+1)+"'")).start();
+				   t.execute(  new Ji(String.valueOf(3),"id<='"+(id*a)+"' and id>'"+id*(a+1)+"'"))  ;
 			 }
 		 }
+		 
+		      System.out.println("开始：  "+t);  
+		      t.destroy();// 所有线程都执行完成才destory  
+		      System.out.println("结束：  "+t);  
+	 
 	 }
 	 
 	public int sqlsum()
@@ -87,9 +97,7 @@ public class Thread_select {
 			e.printStackTrace();
 		} finally {
 			try {
-
 				connect.close();
-			 
 			} catch (SQLException e) {
 			}
 		}

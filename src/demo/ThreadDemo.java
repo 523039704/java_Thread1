@@ -21,7 +21,7 @@ public class ThreadDemo {
 	        for (int i = 0; i < 10; i++) {  
 	            System.out.println(i + " " + getName());  
 	            try {  
-	                sleep((int) Math.random() * 10);  
+	                sleep((int) Math.random() * 100000);  
 	            } catch (InterruptedException e) {  
 	                e.printStackTrace();  
 	            }  
